@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import fs from "fs";
 import path from "path";
-import sharp, { AvailableFormatInfo, FormatEnum, Sharp } from "sharp";
+import sharp, { FormatEnum, Sharp } from "sharp";
 
 export type AvatarFormat = keyof FormatEnum;
 
@@ -111,11 +111,25 @@ const applyResize = (instance: Sharp, setting: AvatarOutputSetting) => {
 
 const applyFormat = (instance: Sharp, setting: AvatarOutputSetting) => {
   const quality = setting.quality ?? (setting.format === "webp" ? 85 : 90);
-  const options: Record<string, unknown> = { quality };
-  if (setting.format === "webp") {
-    options.effort = 6;
+  const format = setting.format as keyof FormatEnum;
+
+  // Use format-specific helpers to satisfy sharp typings
+  switch (format) {
+    case "webp":
+      return instance.webp({ quality, effort: 6 });
+    case "jpeg":
+    case "jpg":
+      return instance.jpeg({ quality, progressive: true });
+    case "png":
+      return instance.png({ quality });
+    case "avif":
+      return instance.avif({ quality });
+    case "heif":
+      return instance.heif({ quality });
+    default:
+      // Fallback: defer to toFormat with loose typing for less common formats
+      return instance.toFormat(format as any, { quality } as any);
   }
-  return instance.toFormat(setting.format as keyof FormatEnum, options as AvailableFormatInfo);
 };
 
 export async function buildOptimisedOutputs(

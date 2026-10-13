@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import sharp, { FormatEnum, Sharp } from "sharp";
 
-export type AvatarFormat = keyof FormatEnum;
+export type AvatarFormat = keyof FormatEnum | "jpg" | "avif";
 
 export interface AvatarOutputSetting {
   format: AvatarFormat;
@@ -111,7 +111,7 @@ const applyResize = (instance: Sharp, setting: AvatarOutputSetting) => {
 
 const applyFormat = (instance: Sharp, setting: AvatarOutputSetting) => {
   const quality = setting.quality ?? (setting.format === "webp" ? 85 : 90);
-  const format = setting.format as keyof FormatEnum;
+  const format: AvatarFormat = setting.format;
 
   // Use format-specific helpers to satisfy sharp typings
   switch (format) {

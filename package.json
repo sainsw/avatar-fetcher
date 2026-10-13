@@ -1,6 +1,6 @@
 {
   "name": "avatar-fetcher",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Fetch and optimise GitHub avatars with versioned outputs",
   "license": "MIT",
   "type": "commonjs",
@@ -18,13 +18,13 @@
     "dev": "tsc -w -p tsconfig.json"
   },
   "dependencies": {
-    "sharp": "^0.33.5"
+    "sharp": "^0.35.5"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
     "typescript": "^5.6.3"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.9.0"
   }
 }
